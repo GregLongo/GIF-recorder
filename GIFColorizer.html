@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+
+<style>
+
+body{
+	background-color:black;
+}
+p{
+	color: grey;
+	font-size: 20px;
+}
+#container {
+
+    height: 400px;
+    width: 400px;  
+    position: relative;
+
+}
+
+#videoElement {
+	position: absolute;
+    width: 400px;
+    height: 400px;
+	object-fit: cover;
+	overflow:hidden;
+	top: 80px;
+	left:45%;
+}
+
+.img{
+    width: 200px;
+    height: 200px;	
+	}
+
+#images{
+	
+    position: absolute;
+    width: 400px;
+    height: 400px;
+	right: 20%;
+	top: 75px;
+}
+#rightside{
+	float: right;
+	width: 50%;
+	position: relative;
+
+}
+#leftside{
+	float: left;
+	width: 50%;
+	position: relative;
+}
+
+
+</style>
+</head>
+  
+<body>
+<center>
+<p>
+Make sure camera is set to "Always Allow"" (only works over HTTPS) Hit Space to Record.<br>
+You can also load from terminal with  "start chrome salmonshaman.com/GIF1.GIFColorizer.html -use-fake-ui-for-media-stream""
+</p>
+</center>
+<div id=leftside>
+<div id = container>
+		<video autoplay="true" id="videoElement">
+		</video>
+</div>
+</div>
+
+<div id="rightside">
+<table id= images>
+	<tr>
+		<td>
+			<img class="img" id= "1">
+		</td>
+		<td>
+			<img class="img" id= "2">
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<img class="img" id= "3">
+		</td>
+		<td>
+			<img class="img" id= "4">
+		</td>
+	</tr>	
+</table>
+
+</div>
+<script src = "gifshot.js"></script>
+<script>
+	
+	
+	 var video = document.querySelector("#videoElement");
+	 
+	navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+	
+	
+	if (navigator.getUserMedia) {       
+	    navigator.getUserMedia({video: true}, handleVideo, videoError);
+	}
+
+	var images = new Array();
+	var i = 0;
+	window.addEventListener("keypress", spaceBar, true);
+	
+	
+	
+	
+	function spaceBar(e){
+		if(e.keyCode == 32){
+		
+		takePhoto();
+
+		}
+	}
+	
+	function handleVideo(stream) {
+	    video.src = window.URL.createObjectURL(stream);
+	}
+	 
+	function videoError(e) {
+	}
+	
+
+	function takePhoto(){
+			i++;
+			if (i>4){
+				i=1;
+				}
+			gifshot.createGIF({'numFrames':20}, function(obj) {
+			if(!video.error) {				
+				var image = obj.image;
+				var gif = document.getElementById(i);
+				gif.src= image;
+				var random = Math.floor((Math.random() * 360) + 1);
+				gif.style.webkitFilter = "sepia(90%) hue-rotate("+ random +"deg) saturate(10)";			
+			}
+		});
+			
+	}   
+          
+        
+      
+</script>
+</body>
+</html>
